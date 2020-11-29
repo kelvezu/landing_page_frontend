@@ -1,4 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
 
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
@@ -36,10 +36,35 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:83/api'
+  },
+
+  auth: {
+    localStorage: false,
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/v1/users/login', method: 'post', propertyName: 'access_token' },
+          logout: { url: '/v1/auth/logout', method: 'post' },
+          user: { url: '/v1/auth/user', method: 'get', propertyName: 'data.attributes' }
+        },
+        token: {
+          required: false,
+          type: 'Bearer',
+        },
+      }
+    },
+    redirect: {
+      login: '/login',
+      logout: '/',
+      // home: '/super-admin'
+    }
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
@@ -56,11 +81,19 @@ export default {
           error: colors.deepOrange.accent4,
           success: colors.green.accent3
         }
-      }
-    }
-  },
+      },
 
-  // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {
+    },
+    icons: {
+      iconfont: 'mdi',
+      values: {
+        login: 'mdi-login',
+        register: 'mdi-account-plus'
+      }
+    },
+
+    // Build Configuration (https://go.nuxtjs.dev/config-build)
+    build: {
+    }
   }
 }

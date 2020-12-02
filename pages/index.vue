@@ -7,5 +7,13 @@
 </template>
 
 <script>
+export default {
+  layout: 'dashboard',
+    asyncData() {
+    // console.log(context)
+  
+  },
+  middleware: 'auth',
+}
 
 </script>

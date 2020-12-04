@@ -17,16 +17,17 @@ export const getters = {
 }
 
 export const actions = {
-    async addUsers({ state }, form) {
-        try {
-            const response = await this.$axios.$post('/v1/users/register', state.form);
-            console.log(response);
+    async addUsers({ state }) {
 
-        } catch (err) {
-            console.error(err)
-        } finally {
-            form.reset();
-        }
+        return new Promise((resolve, reject) => {
+            try {
+                const response = this.$axios.$post('/v1/users/register', state.form);
+                resolve(response);
+            } catch (error) {
+                reject(error)
+            }
+
+        })
     }
 }
 

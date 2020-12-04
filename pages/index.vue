@@ -42,7 +42,7 @@
 <script>
 import { fieldRequired, validateEmail, passwordMin, passwordMax } from '@/utils'
 export default {
-  middleware: 'logged-in',
+
   data() {
     return {
       isValid: true,

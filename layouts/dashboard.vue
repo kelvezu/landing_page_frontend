@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -32,7 +32,7 @@
           </v-list-item-content>
         </v-list-item>
 
-          <v-list-item to="/">
+        <v-list-item to="/">
           <v-list-item-action>
             <v-icon v-text="'$vuetify.icons.register'"></v-icon>
           </v-list-item-action>
@@ -69,6 +69,7 @@
       </v-btn>
     </v-app-bar>
     <v-main>
+      <cus-snackbar />
       <v-container>
         <Nuxt />
       </v-container>

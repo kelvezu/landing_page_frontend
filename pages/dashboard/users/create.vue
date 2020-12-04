@@ -1,15 +1,5 @@
 <template>
   <v-container>
-    <v-snackbar
-      v-model="snackbawr"
-      app
-      top
-      timeout="3000"
-      outlined
-      :color="snackbarColor"
-    >
-      <p>{{ snackbarText }}</p>
-    </v-snackbar>
     <v-card elevation="5" max-width="800" class="mx-auto">
       <v-card-title class="indigo white--text headline pa-2">
         <p class="text-h6">
@@ -115,9 +105,6 @@ export default {
       isValid: true,
       btnLoading: false,
       isValidated: true,
-      snackbawr: false,
-      snackbarText: '',
-      snackbarColor: null,
       rules: {
         fieldRequired,
         min,
@@ -144,43 +131,36 @@ export default {
     ...mapActions({
       addUsers: 'users/addUsers',
     }),
-    // async addUser() {
-    //   this.btnLoading = true
-    //   if (this.$refs.userForm.validate()) {
-    //     try {
-    //       const response = await this.$axios.$post('/v1/users/register',
-    //         this.form
-    //       )
-    //       // clear the form
-    //       this.$refs.userForm.reset()
-    //       console.log(response)
-    //       this.snackbawr = true
-    //       this.snackbarText = 'User has been added'
-    //       this.snackbarColor = 'success'
-    //     } catch (error) {
-    //       console.log(error.response.data)
-    //       this.snackbawr = true
-    //       this.snackbarText = 'Failed to add user.'
-    //       this.snackbarColor = 'red darken-3'
-    //     } finally {
-    //       this.btnLoading = false
-    //     }
-    //   }
-
-    //   this.btnLoading = false
-    // },
 
     async addUser() {
-      try {
-         const response =  await this.addUsers(this.$refs.addUserForm)
-      } catch (error) {
-        console.error('failed to add a user');
-      }
-     
-    },
-    isFormValidated() {
+      this.btnLoading = true
       if (this.$refs.addUserForm.validate()) {
-        this.isValidated = true
+        try {
+          const response = await this.addUsers()
+          this.$refs.addUserForm.reset()
+          this.$store.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
+            textMessage: 'User has been added!',
+            show: true,
+            colorBar: 'green darken-2',
+          })
+          console.log(response)
+        } catch (error) {
+          this.$store.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
+            textMessage: 'Failed to add user!',
+            show: true,
+            colorBar: 'red darken-2',
+          })
+          console.error(error)
+        } finally {
+          this.btnLoading = false
+
+          setTimeout(
+            function () {
+              this.$store.commit('utils/snackbar/SET_CLEAR_SNACKBAR_ATTR', '')
+            }.bind(this),
+            2100
+          )
+        }
       }
     },
   },

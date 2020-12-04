@@ -19,7 +19,7 @@
       </v-card-title>
       <v-card-text>
         <v-form
-          ref="userForm"
+          ref="addUserForm"
           @submit.prevent="addUser"
           v-model="isValid"
           lazy-validation
@@ -31,8 +31,8 @@
                 placeholder="Enter your firstname"
                 type="text"
                 autocomplete="false"
-                :rules="[rules.required, rules.min, rules.max]"
-                v-model="form.firstname"
+                :rules="[rules.fieldRequired, rules.min, rules.max]"
+                v-model="firstname"
               ></v-text-field>
             </v-col>
             <v-col>
@@ -41,8 +41,8 @@
                 placeholder="Enter your lastname"
                 type="text"
                 autocomplete="false"
-                :rules="[rules.required, rules.min, rules.max]"
-                v-model="form.lastname"
+                :rules="[rules.fieldRequired, rules.min, rules.max]"
+                v-model="lastname"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -52,7 +52,7 @@
             placeholder="Enter your email"
             type="email"
             autocomplete="false"
-            v-model="form.email"
+            v-model="email"
             :rules="[rules.validateEmail]"
           ></v-text-field>
 
@@ -61,8 +61,8 @@
             placeholder="Enter your password"
             type="password"
             autocomplete="false"
-            v-model="form.password"
-            :rules="[rules.required, rules.password_min, rules.password_max]"
+            v-model="password"
+            :rules="[rules.fieldRequired, rules.passwordMin, rules.passwordMax]"
           ></v-text-field>
 
           <v-text-field
@@ -70,14 +70,12 @@
             placeholder="Confirm your password"
             type="password"
             autocomplete="false"
-            v-model="form.confirm_password"
+            v-model="confirm_password"
             :rules="[
-              rules.required,
-              rules.password_min,
-              rules.password_max,
-              () =>
-                form.password === form.confirm_password ||
-                'Password didnt matched',
+              rules.fieldRequired,
+              rules.passwordMin,
+              rules.passwordMax,
+              (val) => password == val || 'Password didnt matched!',
             ]"
           ></v-text-field>
 
@@ -98,74 +96,90 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import { getSet } from '@/utils'
+import {
+  fieldRequired,
+  min,
+  max,
+  validateEmail,
+  passwordMin,
+  passwordMax,
+  password_match,
+} from '@/utils/validations'
+
 export default {
   layout: 'dashboard',
   data() {
     return {
       isValid: true,
       btnLoading: false,
-      submitButton: 'Submit',
       isValidated: true,
       snackbawr: false,
       snackbarText: '',
       snackbarColor: null,
-      form: {
-        firstname: null,
-        lastname: null,
-        email: null,
-        password: null,
-        confirm_password: null,
-      },
       rules: {
-        required: (val) => !!val || 'Required',
-        min: (val) =>
-          (val && val.length >= this.$store.state.constants.MIN_CHAR) ||
-          `Minimum of ${this.$store.state.constants.MIN_CHAR} characters`,
-        max: (val) =>
-          (val && val.length <= this.$store.state.constants.MAX_CHAR) ||
-          `Maximum of ${this.$store.state.constants.MAX_CHAR} characters`,
-        validateEmail: (val) =>
-          !val ||
-          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(val) ||
-          'E-mail must be valid',
-        password_min: (val) =>
-          (val && val.length >= this.$store.state.constants.MIN_PASSWORD) ||
-          `Minimum of ${this.$store.state.constants.MIN_PASSWORD} characters`,
-        password_max: (val) =>
-          (val && val.length <= this.$store.state.constants.MAX_PASSWORD) ||
-          `Maximum of ${this.$store.state.constants.MAX_PASSWORD} characters`,
+        fieldRequired,
+        min,
+        max,
+        validateEmail,
+        passwordMin,
+        passwordMax,
       },
     }
   },
 
-  methods: {
-    async addUser() {
-      this.btnLoading = true
-      if (this.$refs.userForm.validate()) {
-        try {
-          const response = await this.$axios.$post('/v1/users/register',
-            this.form
-          )
-          // clear the form
-          this.$refs.userForm.reset()
-          console.log(response)
-          this.snackbawr = true
-          this.snackbarText = 'User has been added'
-          this.snackbarColor = 'success'
-        } catch (error) {
-          console.log(error.response.data)
-          this.snackbawr = true
-          this.snackbarText = 'Failed to add user.'
-          this.snackbarColor = 'red darken-3'
-        } finally {
-          this.btnLoading = false
-        }
-      }
+  computed: {
+    firstname: getSet('users/GET_FIRSTNAME', 'users/SET_FIRSTNAME'),
+    lastname: getSet('users/GET_LASTNAME', 'users/SET_LASTNAME'),
+    email: getSet('users/GET_EMAIL', 'users/SET_EMAIL'),
+    password: getSet('users/GET_PASSWORD', 'users/SET_PASSWORD'),
+    confirm_password: getSet(
+      'users/GET_CONFIRM_PASSWORD',
+      'users/SET_CONFIRM_PASSWORD'
+    ),
+  },
 
-      this.btnLoading = false
+  methods: {
+    ...mapActions({
+      addUsers: 'users/addUsers',
+    }),
+    // async addUser() {
+    //   this.btnLoading = true
+    //   if (this.$refs.userForm.validate()) {
+    //     try {
+    //       const response = await this.$axios.$post('/v1/users/register',
+    //         this.form
+    //       )
+    //       // clear the form
+    //       this.$refs.userForm.reset()
+    //       console.log(response)
+    //       this.snackbawr = true
+    //       this.snackbarText = 'User has been added'
+    //       this.snackbarColor = 'success'
+    //     } catch (error) {
+    //       console.log(error.response.data)
+    //       this.snackbawr = true
+    //       this.snackbarText = 'Failed to add user.'
+    //       this.snackbarColor = 'red darken-3'
+    //     } finally {
+    //       this.btnLoading = false
+    //     }
+    //   }
+
+    //   this.btnLoading = false
+    // },
+
+    async addUser() {
+      try {
+         const response =  await this.addUsers(this.$refs.addUserForm)
+      } catch (error) {
+        console.error('failed to add a user');
+      }
+     
     },
     isFormValidated() {
-      if (this.$refs.userForm.validate()) {
+      if (this.$refs.addUserForm.validate()) {
         this.isValidated = true
       }
     },

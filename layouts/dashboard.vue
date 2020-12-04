@@ -23,7 +23,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item :to="{name: 'dashboard-add-user'}">
+        <v-list-item to="/dashboard/users/create">
           <v-list-item-action>
             <v-icon v-text="'$vuetify.icons.register'"></v-icon>
           </v-list-item-action>
@@ -32,7 +32,16 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="$auth.logout()">
+          <v-list-item to="/">
+          <v-list-item-action>
+            <v-icon v-text="'$vuetify.icons.register'"></v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Login Page</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item to="/logout">
           <v-list-item-action>
             <v-icon v-text="'$vuetify.icons.login'"></v-icon>
           </v-list-item-action>
@@ -61,7 +70,7 @@
     </v-app-bar>
     <v-main>
       <v-container>
-        <nuxt />
+        <Nuxt />
       </v-container>
     </v-main>
     <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>

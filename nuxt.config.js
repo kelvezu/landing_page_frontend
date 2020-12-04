@@ -60,9 +60,9 @@ export default {
       }
     },
     redirect: {
-      login: '/login',
-      logout: '/login',
-      home: '/'
+      login: '/',
+      logout: '/',
+      home: '/dashboard'
     }
   },
 

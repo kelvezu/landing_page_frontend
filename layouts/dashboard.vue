@@ -92,7 +92,6 @@
 
 <script>
 export default {
-  middleware: 'super-admin',
   data() {
     return {
       clipped: false,
@@ -105,9 +104,9 @@ export default {
           to: '/dashboard',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          icon: 'mdi-account',
+          title: 'User',
+          to: '/dashboard/users',
         },
       ],
       miniVariant: false,

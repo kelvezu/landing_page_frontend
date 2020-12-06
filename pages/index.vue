@@ -45,6 +45,7 @@
 <script>
 import { validateEmail, fieldRequired } from '@/utils'
 export default {
+  auth: 'false',
   middleware: 'logged-in',
   data() {
     return {

@@ -18,7 +18,6 @@ export const getters = {
 
 export const actions = {
     async addUsers({ state }) {
-
         return new Promise((resolve, reject) => {
             try {
                 const response = this.$axios.$post('/v1/users/register', state.form);
@@ -26,9 +25,8 @@ export const actions = {
             } catch (error) {
                 reject(error)
             }
-
         })
-    }
+    },
 }
 
 export const mutations = {

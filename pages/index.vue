@@ -22,6 +22,7 @@
             :rules="[rules.validateEmail]"
           >
           </v-text-field>
+
           <v-text-field
             label="Password"
             placeholder="Enter your password"
@@ -32,7 +33,9 @@
           >
           </v-text-field>
 
-          <v-btn type="submit" color="primary"> Submit </v-btn>
+          <v-btn :disabled="!isValid" type="submit" color="primary">
+            Submit
+          </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -40,9 +43,9 @@
 </template>
 
 <script>
-import { fieldRequired, validateEmail, passwordMin, passwordMax } from '@/utils'
+import { validateEmail, fieldRequired } from '@/utils'
 export default {
-
+  middleware: 'logged-in',
   data() {
     return {
       isValid: true,
@@ -53,8 +56,6 @@ export default {
       rules: {
         fieldRequired,
         validateEmail,
-        passwordMin,
-        passwordMax,
       },
     }
   },
@@ -68,7 +69,9 @@ export default {
           this.$store.commit('roles/SET_ROLES', this.$auth.user.roles)
         } catch (error) {
           console.error(error)
+          this.$store.commit('utils/snackbar/SET_SNACKBAR_ATTR', {textMessage: 'Invalid Credentials', colorBar: 'error' })
         }
+        console.log('validated')
       }
       console.log('login')
     },

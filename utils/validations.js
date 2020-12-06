@@ -10,10 +10,7 @@ export const max = (val) =>
     (val && val.length <= MAX_CHAR) ||
     `Maximum of ${MAX_CHAR} characters`
 
-export const validateEmail = (val) =>
-    !!val ||
-    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{23})+$/.test(val) ||
-    'E-mail must be valid'
+export const validateEmail = (val) => (/.+@.+\..+/.test(val) || 'E-mail must be valid')
 
 export const passwordMin = (val) =>
     (val && val.length >= MIN_PASSWORD) ||
@@ -23,4 +20,6 @@ export const passwordMax = (val) =>
     (val && val.length <= MAX_PASSWORD) ||
     `Maximum of ${MAX_PASSWORD} characters`
 
-
+  // !!val ||
+    // /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{23})+$/.test(val) ||
+    // 'E-mail must be valid'

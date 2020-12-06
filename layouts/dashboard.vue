@@ -102,7 +102,7 @@ export default {
         {
           icon: 'mdi-apps',
           title: 'Welcome',
-          to: '/',
+          to: '/dashboard',
         },
         {
           icon: 'mdi-chart-bubble',

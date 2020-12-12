@@ -105,7 +105,7 @@ export default {
         },
         {
           icon: 'mdi-account',
-          title: 'User',
+          title: 'Users',
           to: '/dashboard/users',
         },
       ],

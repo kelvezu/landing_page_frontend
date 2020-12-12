@@ -97,7 +97,7 @@ export default {
     }
   },
 
-  router: {
-    middleware: ['super-admin']
-  }
+  // router: {
+  //   middleware: ['super-admin']
+  // }
 }

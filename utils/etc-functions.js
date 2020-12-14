@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce';
  * @param Timer 1000
  * @returns Object
  */
-export const getSet = function (getter, setter, timer = 1000) {
+export const getSet = function (getter, setter, timer = .500) {
     return {
         get() {
             return this.$store.getters[getter]

@@ -29,7 +29,7 @@ export const mutations = {
         state.show = val
     },
 
-    SET_SNACKBAR_ATTR(state, { textMessage, show = true, colorBar }) {
+    SET_SNACKBAR_ATTR(state, { textMessage, show = true, colorBar = "green darken-4" }) {
         state.textMessage = textMessage;
         state.show = show;
         state.colorBar = colorBar;

@@ -18,6 +18,7 @@ export const state = () => ({
         total: null, // total of users
     },
     loading: false,
+    isSuccess: false,
 })
 
 export const getters = {
@@ -32,6 +33,7 @@ export const getters = {
     GET_META_LAST_PAGE: state => state.metaData.last_page,
     GET_META_TOTAL: state => state.metaData.total,
     GET_LOADING: state => state.loading,
+    GET_IS_SUCCESS: state => state.isSuccess,
 
 }
 
@@ -77,6 +79,29 @@ export const actions = {
             commit('SET_META_DATA', response.meta);
         } catch (error) {
             console.error(`Failed to search the user. ERROR: ${error}`)
+        } finally {
+            commit('SET_LOADING')
+        }
+    },
+
+    async addUserData({ state, commit, dispatch }) {
+
+        commit('SET_LOADING', true);
+        try {
+            await this.$axios.$post('/v1/users/register', state.form);
+            await dispatch('fetchUsers', {})
+            commit('SET_SUCCESS', true)
+            this.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
+                textMessage: 'User has been added successfully',
+            })
+            commit('CLEAR_FORM')
+        } catch (error) {
+            commit('SET_SUCCESS')
+            console.error(`Failed to add user. ERROR:${error}`)
+            this.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
+                textMessage: error.response.data.error,
+                colorBar: 'red darken-4',
+            })
         } finally {
             commit('SET_LOADING')
         }
@@ -140,5 +165,15 @@ export const mutations = {
 
     SET_LOADING(state, val = false) {
         state.loading = val
+    },
+
+    CLEAR_FORM(state) {
+        Object.keys(state.form).map(attr => state.form[attr] = null);
+    },
+
+    SET_SUCCESS(state, value = false) {
+        state.isSuccess = value
     }
+
+
 }

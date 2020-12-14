@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <cus-snackbar />
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -69,7 +70,6 @@
       </v-btn>
     </v-app-bar>
     <v-main>
-      <cus-snackbar />
       <v-container>
         <Nuxt />
       </v-container>

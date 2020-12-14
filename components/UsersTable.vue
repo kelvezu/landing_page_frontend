@@ -5,6 +5,7 @@
     :server-items-length="usersTotal"
     :items-per-page="10"
     :loading="isLoading"
+    loading-text="Fetching Users. Please wait."
     dense
     :options.sync="options"
     disable-sort
@@ -33,6 +34,10 @@ export default {
           text: 'Fullname',
           value: 'data.attributes.fullname',
           align: 'start',
+        },
+          {
+          text: 'Email',
+          value: 'data.attributes.email',
         },
         {
           text: 'Date Registered',

@@ -3,7 +3,7 @@
     <v-card elevation="5" max-width="800" class="mx-auto">
       <v-card-title class="indigo white--text headline pa-2">
         <p class="text-h6">
-          <v-icon color="white" v-text="'$vuetify.icons.register'"></v-icon> Add
+          <v-icon color="white" left v-text="'$vuetify.icons.register'"></v-icon> Add
           User
         </p>
       </v-card-title>

@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="show" :color="colorBar" timeout="2000" app top>
+  <v-snackbar elevation="5" v-model="show" :color="colorBar" timeout="2000" app top>
     <p class="font-weight-black">{{ textMessage }}</p>
   </v-snackbar>
 </template>

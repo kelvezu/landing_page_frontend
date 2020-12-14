@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-form class="ma-2" @submit.prevent="searchUsers">
+    <v-form class="mx-2" @submit.prevent="searchUsers">
       <v-row>
         <v-col cols="8"
           ><v-text-field

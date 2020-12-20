@@ -88,7 +88,8 @@ export default {
       iconfont: 'mdi',
       values: {
         login: 'mdi-login',
-        register: 'mdi-account-plus'
+        register: 'mdi-account-plus',
+        deleteUser: 'mdi-account-remove'
       }
     },
 

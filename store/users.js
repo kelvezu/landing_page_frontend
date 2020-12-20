@@ -87,8 +87,8 @@ export const actions = {
     async addUserData({ state, commit, dispatch }) {
         commit('SET_LOADING', true);
         try {
-            await this.$axios.$post('/v1/users/register', state.form);
-            await dispatch('fetchUsers', {})
+            const response = await this.$axios.$post('/v1/users/register', state.form);
+            commit('SET_NEW_DATA', response)
             commit('SET_SUCCESS', true)
             this.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
                 textMessage: 'User has been added successfully',
@@ -121,10 +121,35 @@ export const actions = {
             })
             return error;
         }
+    },
+
+    async deleteUserData({ commit }, { userId, userIndex }) {
+        console.log(userIndex)
+        try {
+            await this.$axios.$delete(`/v1/users/${userId}`);
+            commit('REMOVE_DELETED_DATA', userIndex)
+            this.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
+                textMessage: 'User has been deleted.',
+            })
+        } catch (error) {
+            this.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
+                textMessage: `Failed to delete user.`,
+                colorBar: 'red darken-4',
+            })
+            return `Failed to delete user. ERROR: ${error}`
+        }
     }
 }
 
 export const mutations = {
+    SET_NEW_DATA(state, data) {
+        state.usersData.unshift(data);
+    },
+
+    REMOVE_DELETED_DATA(state, index) {
+        state.usersData.splice(index, 1);
+    },
+
     SET_FIRSTNAME(state, value) {
         state.form.firstname = value
     },

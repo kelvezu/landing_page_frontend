@@ -51,11 +51,36 @@
                   </v-col>
                 </v-row>
                 <v-card-actions>
-                  <v-btn :loading="editLoading" color="primary" type="submit">Submit</v-btn>
+                  <v-btn :loading="editLoading" color="primary" type="submit"
+                    >Submit</v-btn
+                  >
+                  <v-btn @click="editDialog = false">Cancel</v-btn>
                 </v-card-actions>
               </v-container>
             </v-form>
           </v-card-text>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="deleteDialog" max-width="500px">
+        <v-card>
+          <v-card-title>
+            <v-icon left v-text="'$vuetify.icons.deleteUser'"> </v-icon>
+            Delete User
+          </v-card-title>
+          <v-card-text>
+            <p>
+              Do you want to delete <b>{{ deleteForm.fullname }}</b> from the
+              database?
+            </p>
+          </v-card-text>
+          <v-card-actions>
+            <v-form @submit.prevent="deleteUser">
+              <v-btn color="red white--text" type="submit">Delete</v-btn>
+            </v-form>
+
+            <v-btn class="ml-2"  @click="deleteDialog = false">Cancel</v-btn>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </template>
@@ -71,7 +96,7 @@
       <v-icon small class="mr-2" @click.stop="editItem(item)">
         mdi-pencil
       </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon small @click.stop="deleteItem(item, usersData.indexOf(item))"> mdi-delete </v-icon>
     </template>
   </v-data-table>
 </template>
@@ -84,13 +109,18 @@ export default {
   data() {
     return {
       editDialog: false,
-     
       editLoading: false,
       editForm: {
         user_id: null,
         firstname: null,
         lastname: null,
         email: null,
+      },
+      deleteDialog: false,
+      deleteUserIndex: null,
+      deleteForm: {
+        user_id: null,
+        fullname: null,
       },
       rules: {
         fieldRequired,
@@ -138,9 +168,9 @@ export default {
       this.editForm.email = item.data.attributes.email
     },
     async updateUser() {
-      this.editLoading = true;
+      this.editLoading = true
       try {
-         await this.$store.dispatch('users/updateUserData', {
+        await this.$store.dispatch('users/updateUserData', {
           userId: this.editForm.user_id,
           formData: this.editForm,
         })
@@ -151,8 +181,24 @@ export default {
         this.editLoading = false
       }
     },
-    deleteItem(item) {
-      console.log(item.data.attributes.fullname)
+    deleteItem(item, index) {
+      this.deleteDialog = true
+      this.deleteUserIndex = index
+      this.deleteForm.user_id = item.data.user_id
+      this.deleteForm.fullname = item.data.attributes.fullname
+    },
+    async deleteUser() {
+      try {
+        await this.$store.dispatch('users/deleteUserData', {
+          userId: this.deleteForm.user_id,
+          userIndex: this.deleteUserIndex
+        })
+       
+      } catch (error) {
+        console.error(error)
+      } finally {
+        this.deleteDialog = false
+      }
     },
   },
 

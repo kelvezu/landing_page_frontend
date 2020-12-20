@@ -85,7 +85,6 @@ export const actions = {
     },
 
     async addUserData({ state, commit, dispatch }) {
-
         commit('SET_LOADING', true);
         try {
             await this.$axios.$post('/v1/users/register', state.form);
@@ -104,6 +103,23 @@ export const actions = {
             })
         } finally {
             commit('SET_LOADING')
+        }
+    },
+
+    async updateUserData({ dispatch }, { userId, formData }) {
+        try {
+            const response = await this.$axios.$put(`/v1/users/${userId}`, formData);
+            await dispatch('fetchUsers', {});
+            this.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
+                textMessage: 'User has been updated.',
+            })
+            return response;
+        } catch (error) {
+            this.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
+                textMessage: error.response.data.error,
+                colorBar: 'red darken-4',
+            })
+            return error;
         }
     }
 }
@@ -173,7 +189,5 @@ export const mutations = {
 
     SET_SUCCESS(state, value = false) {
         state.isSuccess = value
-    }
-
-
+    },
 }

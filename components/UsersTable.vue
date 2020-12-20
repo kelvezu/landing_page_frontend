@@ -13,6 +13,52 @@
       itemsPerPageOptions: [5, 10, 15, 20],
     }"
   >
+    <template #top>
+      <v-dialog v-model="editDialog" max-width="500px">
+        <v-card>
+          <v-card-title class="headline"> Edit Form </v-card-title>
+          <v-card-text>
+            <v-form @submit.prevent="updateUser">
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field
+                      autocomplete="false"
+                      label="Firstname"
+                      required
+                      v-model="editForm.firstname"
+                      :rules="[rules.fieldRequired, rules.min, rules.max]"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-text-field
+                      autocomplete="false"
+                      label="Lastname"
+                      v-model="editForm.lastname"
+                      :rules="[rules.fieldRequired, rules.min, rules.max]"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      autocomplete="false"
+                      label="Email*"
+                      type="email"
+                      required
+                      v-model="editForm.email"
+                      :rules="[rules.validateEmail]"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-card-actions>
+                  <v-btn :loading="editLoading" color="primary" type="submit">Submit</v-btn>
+                </v-card-actions>
+              </v-container>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </template>
     <template #progress>
       <v-progress-linear
         color="purple"
@@ -20,14 +66,38 @@
         indeterminate
       ></v-progress-linear>
     </template>
+
+    <template v-slot:item.actions="{ item }">
+      <v-icon small class="mr-2" @click.stop="editItem(item)">
+        mdi-pencil
+      </v-icon>
+      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+    </template>
   </v-data-table>
 </template>
 
 <script>
 import { getSet } from '~/utils'
+import { fieldRequired, min, max, validateEmail } from '@/utils/validations'
+
 export default {
   data() {
     return {
+      editDialog: false,
+     
+      editLoading: false,
+      editForm: {
+        user_id: null,
+        firstname: null,
+        lastname: null,
+        email: null,
+      },
+      rules: {
+        fieldRequired,
+        min,
+        max,
+        validateEmail,
+      },
       pageNum: null,
       headers: [
         {
@@ -35,13 +105,17 @@ export default {
           value: 'data.attributes.fullname',
           align: 'start',
         },
-          {
+        {
           text: 'Email',
           value: 'data.attributes.email',
         },
         {
           text: 'Date Registered',
           value: 'data.attributes.date_registered',
+        },
+        {
+          text: 'Actions',
+          value: 'actions',
         },
       ],
       options: null,
@@ -55,6 +129,30 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+    editItem(item) {
+      this.editDialog = true
+      this.editForm.user_id = item.data.user_id
+      this.editForm.firstname = item.data.attributes.firstname
+      this.editForm.lastname = item.data.attributes.lastname
+      this.editForm.email = item.data.attributes.email
+    },
+    async updateUser() {
+      this.editLoading = true;
+      try {
+         await this.$store.dispatch('users/updateUserData', {
+          userId: this.editForm.user_id,
+          formData: this.editForm,
+        })
+        this.editDialog = false
+      } catch (error) {
+        console.error(error)
+      } finally {
+        this.editLoading = false
+      }
+    },
+    deleteItem(item) {
+      console.log(item.data.attributes.fullname)
     },
   },
 

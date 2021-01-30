@@ -24,15 +24,6 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item to="/dashboard/users/create">
-          <v-list-item-action>
-            <v-icon v-text="'$vuetify.icons.register'"></v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Add user</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
         <v-list-item to="/">
           <v-list-item-action>
             <v-icon v-text="'$vuetify.icons.register'"></v-icon>
@@ -104,15 +95,20 @@ export default {
           to: '/dashboard',
         },
         {
-          icon: 'mdi-account',
-          title: 'Users',
+          icon: '$vuetify.icons.userSettings',
+          title: 'Users Settings',
           to: '/dashboard/users',
         },
+        {
+          icon: '$vuetify.icons.announcementSettings',
+          title: 'Announcement Settings',
+          to: '/dashboard/announcements',
+        }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js',
+      title: 'LandingPage',
     }
   },
 }

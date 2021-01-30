@@ -16,3 +16,11 @@ export const getSet = function (getter, setter, timer = .500) {
         }, timer),
     }
 }
+
+// export const fetchData = async function (apiLink) {
+//     try {
+//         return response = await this.$axios.$get(apiLink)
+//     } catch (err) {
+//         return err
+//     }
+// }

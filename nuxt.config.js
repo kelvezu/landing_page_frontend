@@ -21,6 +21,7 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
+    { src: '~/plugins/TipTapVuetify', mode: 'client' }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -89,12 +90,19 @@ export default {
       values: {
         login: 'mdi-login',
         register: 'mdi-account-plus',
-        deleteUser: 'mdi-account-remove'
+        deleteUser: 'mdi-account-remove',
+        userSettings: 'mdi-account-cog',
+        announcementSettings: 'mdi-message-cog',
+        formatBold: 'mdi-format-bold',
+        formatUnderline: 'mdi-format-underline',
+        formatItalic: 'mdi-format-italic',
+        accountVoice: 'mdi-account-voice',
       }
     },
 
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {
+      transpile: ['vuetify/lib', "tiptap-vuetify"]
     }
   },
 

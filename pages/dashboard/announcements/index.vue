@@ -27,7 +27,12 @@
                 >Edit</v-btn
               >
               <v-btn
-                @click.stop="removeAnnouncement(announcement, announcements.indexOf(announcement))"
+                @click.stop="
+                  removeAnnouncement(
+                    announcement,
+                    announcements.indexOf(announcement)
+                  )
+                "
                 color="error"
                 >Delete</v-btn
               >
@@ -45,16 +50,15 @@ export default {
   layout: 'dashboard',
   data: () => ({
     editDialog: false,
-    editForm: {
-      id: null,
-      description: null,
-      is_published: null,
-    },
   }),
   async asyncData({ store }) {
     const announcements = await store.dispatch(
       'announcement/fetchAnnouncements'
-    )
+    );
+
+    store.commit('announcement/SET_EDIT_FORM', {})
+    store.commit('announcement/SET_DELETE_FORM', {})
+
   },
   methods: {
     async addAnnouncement() {
@@ -63,27 +67,26 @@ export default {
       await this.$store.dispatch('announcement/addAnnouncement')
       await this.$store.commit('richTextEditor/SET_CONTENT')
     },
-    editAnnouncement(data) {
+    editAnnouncement(announcement) {
       const {
         data: {
           announcement_id,
           attributes: { description, is_published },
         },
-      } = data
+      } = announcement
 
-      this.editForm.id = announcement_id
-      this.editForm.is_published = is_published
+      this.$store.commit('announcement/SET_EDIT_FORM', {
+        id: announcement_id,
+        description: description,
+        is_published: is_published,
+      })
       this.$store.commit('richTextEditor/SET_CONTENT', description)
       this.$store.commit('announcement/SET_EDIT_DIALOG', true)
     },
-    updateAnnouncement() {
-      const { id } = this.editForm
-      this.$store.dispatch('announcement/updateAnnouncement', {
-        id: id,
-        description: this.$store.getters['richTextEditor/GET_CONTENT'],
-      })
+    async updateAnnouncement() {
+      await this.$store.dispatch('announcement/updateAnnouncement')
     },
-    removeAnnouncement({ data },index) {
+    removeAnnouncement({ data }, index) {
       const {
         announcement_id,
         attributes: { description, is_published },

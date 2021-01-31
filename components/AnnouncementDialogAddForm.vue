@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" width="70%">
+    <v-dialog v-model="addDialog" width="70%" persistent>
       <v-form @submit.prevent="formFunction">
         <form-slot>
           <rich-text-editor />
@@ -16,22 +16,25 @@
             >
               Submit
             </v-btn>
-            <v-btn color="secondary" @click="dialog = false"> Cancel </v-btn>
+            <v-btn color="secondary" @click="$store.commit('announcement/SET_ADD_DIALOG', false)"> Cancel </v-btn>
           </template>
         </form-slot>
       </v-form>
     </v-dialog>
-    <v-btn @click.stop="dialog = !dialog" color="primary">
+    <v-btn @click.stop="openDialog" color="primary">
       {{ formType.buttonText }}
     </v-btn>
   </div>
 </template>
 
 <script>
+import { getSet } from '~/utils'
 export default {
-  data: () => ({
-    dialog: false,
-  }),
+  methods: {
+    openDialog() {
+      this.$store.commit('announcement/SET_ADD_DIALOG', true)
+    }
+  },
   props: {
     formFunction: {
       type: [Function, Promise],
@@ -44,8 +47,8 @@ export default {
       }),
     },
   },
+  computed: {
+    addDialog: getSet('announcement/GET_ADD_DIALOG', 'announcement/SET_ADD_DIALOG')
+  }
 }
 </script>
-
-<style>
-</style>

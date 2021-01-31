@@ -3,13 +3,19 @@ export const state = () => ({
     loading: false,
     announcements: null,
     editDialog: false,
+    editForm: {
+        id: null,
+        description: null,
+        is_published: null,
+    },
     deleteDialog: false,
     deleteForm: {
         id: null,
         index: null,
         description: null,
         is_published: null,
-    }
+    },
+    addDialog: false,
 })
 
 export const getters = {
@@ -19,6 +25,7 @@ export const getters = {
     GET_EDIT_DIALOG: state => state.editDialog,
     GET_DELETE_DIALOG: state => state.deleteDialog,
     GET_DELETE_FORM: state => state.deleteForm,
+    GET_ADD_DIALOG: state => state.addDialog,
 }
 
 export const actions = {
@@ -37,6 +44,7 @@ export const actions = {
             return error;
         } finally {
             commit('SET_LOADING');
+            commit('SET_ADD_DIALOG');
         }
     },
     async fetchAnnouncements({ commit }) {
@@ -50,24 +58,22 @@ export const actions = {
             commit('SET_LOADING');
         }
     },
-    async updateAnnouncement({ commit, dispatch }, { id, description }) {
+    async updateAnnouncement({ commit, dispatch, state }) {
         commit('SET_LOADING', true);
         try {
-            await this.$axios.$put(`/v1/announcements/${id}`, { description: description });
-            await dispatch('fetchAnnouncements');
-            console.log('Announcement Updated');
+            await this.$axios.$put(`/v1/announcements/${state.editForm.id}`, { description: this.getters['richTextEditor/GET_CONTENT'] });
             this.commit('utils/snackbar/SET_SNACKBAR_ATTR', {
                 textMessage: 'Announcement has been updated successfully',
             })
         } catch (error) {
             console.error(error);
         } finally {
+            dispatch('fetchAnnouncements');
             commit('SET_LOADING');
         }
     },
 
     async deleteAnnouncement({ commit, state }) {
-        console.log(state.deleteForm);
         commit('SET_LOADING', true);
         try {
             await this.$axios.$delete(`/v1/announcements/${state.deleteForm.id}`);
@@ -107,10 +113,19 @@ export const mutations = {
     REMOVE_DELETED_ANNOUNCEMENT(state, index) {
         state.announcements.splice(index, 1);
     },
-    SET_DELETE_FORM(state, { id, description, is_published, index }) {
+    SET_EDIT_FORM(state, { id = null, description = null, is_published = null }) {
+        state.editForm.id = id;
+        state.editForm.description = description;
+        state.editForm.is_published = is_published;
+    },
+    SET_DELETE_FORM(state, { id = null, description = null, is_published = null, index = null }) {
         state.deleteForm.id = id;
         state.deleteForm.description = description;
         state.deleteForm.is_published = is_published;
         state.deleteForm.index = index;
+    },
+    SET_ADD_DIALOG(state, payload) {
+        // console.log(payload);
+        state.addDialog = payload
     }
 }

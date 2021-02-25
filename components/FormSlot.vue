@@ -9,7 +9,7 @@
       </span>
     </v-card-title>
     <v-card-text>
-      <div class="pa-1">
+      <div class="pa-3">
         <slot></slot>
       </div>
     </v-card-text>
@@ -19,7 +19,3 @@
     </v-card-actions>
   </v-card>
 </template>
-
-<script>
-export default {}
-</script>

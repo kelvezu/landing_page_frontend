@@ -1,4 +1,4 @@
-import colors from 'vuetify/es5/util/colors';
+import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
@@ -8,21 +8,16 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: '' },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [
-  ],
+  css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [
-    { src: '~/plugins/TipTapVuetify', mode: 'client' }
-  ],
+  plugins: [{ src: '~/plugins/TipTapVuetify', mode: 'client' }],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -42,7 +37,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://localhost:83/api'
+    baseURL: 'http://localhost:83/api',
   },
 
   auth: {
@@ -50,21 +45,29 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/v1/users/login', method: 'post', propertyName: 'access_token' },
+          login: {
+            url: '/v1/users/login',
+            method: 'post',
+            propertyName: 'access_token',
+          },
           logout: { url: '/v1/auth/logout', method: 'post' },
-          user: { url: '/v1/auth/user', method: 'get', propertyName: 'data.attributes' }
+          user: {
+            url: '/v1/auth/user',
+            method: 'get',
+            propertyName: 'data.attributes',
+          },
         },
         token: {
           required: false,
           type: 'Bearer',
         },
-      }
+      },
     },
     redirect: {
       login: '/',
       logout: '/',
-      home: '/dashboard'
-    }
+      home: '/dashboard',
+    },
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -80,10 +83,9 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
+          success: colors.green.accent3,
+        },
       },
-
     },
     icons: {
       iconfont: 'mdi',
@@ -97,13 +99,15 @@ export default {
         formatUnderline: 'mdi-format-underline',
         formatItalic: 'mdi-format-italic',
         accountVoice: 'mdi-account-voice',
-      }
+        commentAccount: 'mdi-comment-account',
+        commentQuote: 'mdi-comment-quote',
+      },
     },
 
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {
-      transpile: ['vuetify/lib', "tiptap-vuetify"]
-    }
+      transpile: ['vuetify/lib', 'tiptap-vuetify'],
+    },
   },
 
   // router: {

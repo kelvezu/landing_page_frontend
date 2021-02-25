@@ -103,7 +103,12 @@ export default {
           icon: '$vuetify.icons.announcementSettings',
           title: 'Announcement Settings',
           to: '/dashboard/announcements',
-        }
+        },
+        {
+          icon: '$vuetify.icons.commentQuote',
+          title: 'Testimonials Settings',
+          to: '/dashboard/testimonials',
+        },
       ],
       miniVariant: false,
       right: true,

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <cus-snackbar />
+    <custom-snackbar />
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
